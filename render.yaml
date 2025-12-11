@@ -1,0 +1,29 @@
+services:
+  # 1. FastAPI Web Service
+  - type: web
+    name: fincrawl-backend
+    runtime: docker
+    dockerContext: ./backend
+    dockerfilePath: ./backend/Dockerfile
+    envVars:
+      - key: USE_LOCAL_STORAGE
+        value: "true"
+      - key: LOCAL_STORAGE_PATH
+        value: "/var/lib/data/local_data"
+      - key: PERSISTENT_DATA_PATH
+        value: "/var/lib/data"
+    disk:
+      name: data
+      mountPath: /var/lib/data
+      sizeGB: 1
+    startCommand: sh /app/start.sh
+    healthCheckPath: /
+
+  # 2. Celery Worker (Optional: Runs in same container for cost saving in MVP, or separate)
+  # For free tier, we often just run everything in one container or use eager mode on web.
+  # Let's keep it simple: WE run Celery IN the web container for MVP hackathon (using supervisord) OR just use Eager mode.
+  # Since we are using Eager mode currently (Redis unused), we don't need a separate worker service!
+  # The web service handles the tasks synchronously.
+
+databases:
+  # We are using SQLite on disk for this MVP plan.
