@@ -3,3 +3,4 @@ local_data/
 fincrawl.db
 __pycache__/
 *.pyc
+chroma_db/

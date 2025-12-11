@@ -12,3 +12,6 @@ python-multipart
 lxml
 pdfminer.six
 pydantic-settings
+chromadb
+sentence-transformers
+langchain-text-splitters

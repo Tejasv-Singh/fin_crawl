@@ -7,6 +7,10 @@ from app.db.session import SessionLocal
 from app.db.models import Document
 from datetime import datetime
 import requests
+import os
+from app.core.config import settings
+from app.services.vector_db import vector_db
+from app.services.embedding import embedding_service
 
 @celery_app.task
 def crawl_sec_edgar():
@@ -19,6 +23,9 @@ def crawl_sec_edgar():
             # Check if exists
             exists = db.query(Document).filter(Document.url == filing['link']).first()
             if exists:
+                if exists.status == "COLLECTED":
+                     print(f"Triggering processing for existing doc {exists.id}")
+                     process_document.delay(exists.id)
                 continue
 
             # Download content (Basic HTML for now)
@@ -47,7 +54,11 @@ def crawl_sec_edgar():
                 )
                 db.add(doc)
                 db.commit()
+                db.refresh(doc) # Get ID
                 print(f"Processed SEC filing: {filing['title']}")
+                
+                # Trigger Processing
+                process_document.delay(doc.id)
                 
             except Exception as e:
                 print(f"Error processing filing {filing['link']}: {e}")
@@ -66,6 +77,8 @@ def crawl_rss_feed(url: str):
              # Check if exists
             exists = db.query(Document).filter(Document.url == item['link']).first()
             if exists:
+                if exists.status == "COLLECTED":
+                     process_document.delay(exists.id)
                 continue
             
             # For RSS, we might just store metadata first, or crawl content immediately.
@@ -88,7 +101,67 @@ def crawl_rss_feed(url: str):
                 )
                 db.add(doc)
                 db.commit()
+                db.refresh(doc)
                 print(f"Processed RSS item: {item['title']}")
+                
+                # Trigger Processing
+                process_document.delay(doc.id)
 
+    finally:
+        db.close()
+
+@celery_app.task
+def process_document(doc_id: int):
+    """
+    Reads document content, chunks it, embeds it, and saves to Vector DB.
+    """
+    db = SessionLocal()
+    try:
+        doc = db.query(Document).filter(Document.id == doc_id).first()
+        if not doc:
+            print(f"Document {doc_id} not found.")
+            return
+        
+        if doc.status == "EMBEDDED":
+            print(f"Document {doc_id} already embedded.")
+            return
+
+        # Read content
+        content = ""
+        # Local storage read
+        if settings.USE_LOCAL_STORAGE:
+             if doc.raw_s3_key and os.path.exists(doc.raw_s3_key):
+                 with open(doc.raw_s3_key, 'r', encoding='utf-8', errors='ignore') as f:
+                     content = f.read()
+        else:
+            # MinIO read placeholder (not implemented for MVP as we switched to local)
+            pass
+        
+        if not content:
+            print(f"No content for document {doc_id}")
+            return
+
+        # Chunk
+        print(f"Chunking document {doc_id}...")
+        chunks = embedding_service.split_text(content)
+        
+        if not chunks:
+            print("No chunks generated.")
+            return
+
+        # Embed & Store
+        # ChromaDB expects IDs. We'll generate simple ones.
+        ids = [f"doc_{doc_id}_chunk_{i}" for i in range(len(chunks))]
+        metadatas = [{"doc_id": doc_id, "source": doc.source, "title": doc.title, "url": doc.url} for _ in chunks]
+        
+        print(f"Adding {len(chunks)} chunks to Vector DB...")
+        vector_db.add_chunks(chunks, metadatas, ids)
+        
+        doc.status = "EMBEDDED"
+        db.commit()
+        print(f"Successfully embedded document {doc_id}.")
+        
+    except Exception as e:
+        print(f"Error processing document {doc_id}: {e}")
     finally:
         db.close()
