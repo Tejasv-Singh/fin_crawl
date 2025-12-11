@@ -105,7 +105,7 @@ Click below to deploy the Backend + Worker + Database to Render.com (Auto-config
 ### Frontend (GitHub Pages)
 The Repository enables `GitHub Pages` automatically via GitHub Actions.
 1. Go to Repo Settings -> Pages -> Source: `GitHub Actions`.
-2. The dashboard will be live at `https://tejasv-singh.github.io/FINCRAWL/`.
+2. The dashboard will be live at `https://tejasv-singh.github.io/fin_crawl/`.
 3. **Important**: You must configure the Frontend to talk to the Backend.
    - Go to Repo Settings -> Secrets and variables -> Actions -> New Repository Variable.
    - Name: `VITE_API_URL`
