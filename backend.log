@@ -1,0 +1,21 @@
+nohup: ignoring input
+INFO:     Will watch for changes in these directories: ['/home/hada_linux/Projects/ML/SnowFest']
+INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+INFO:     Started reloader process [79603] using WatchFiles
+INFO:     Started server process [79611]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+Loading Embedding Model...
+INFO:     127.0.0.1:37578 - "GET /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37590 - "GET /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54934 - "GET /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54950 - "GET /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54950 - "GET /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54934 - "GET /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54934 - "GET /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54950 - "GET /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54950 - "GET /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54934 - "GET /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54934 - "GET /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54950 - "GET /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33004 - "GET /api/v1/documents HTTP/1.1" 200 OK

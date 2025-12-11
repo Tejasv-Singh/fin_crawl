@@ -4,7 +4,10 @@ class ScoringService:
     RISK_KEYWORDS = [
         "bankruptcy", "default", "material weakness", "going concern",
         "investigation", "litigation", "subpoena", "restatement",
-        "adverse opinion", "fraud", "resignation"
+        "adverse opinion", "fraud", "resignation",
+        # Benign but scorable terms for MVP/Demo sensitivity
+        "risk", "debt", "uncertainty", "loss", "challenges", "volatility",
+        "decline", "negative", "fail", "difficult"
     ]
 
     @staticmethod
