@@ -33,12 +33,12 @@ Designed as a hackathon-ready MVP, FINCRAWL combines intelligent ingestion, sema
   - Pattern classifiers
   - Semantic similarity to known risk templates
 
-### 📊 Interactive Dashboard (React)
-- Company-level risk panel
-- Time-series score visualization
-- Highlighted risk excerpts
-- Filings viewer
-- Search & filtering
+### 📊 Premium Interactive Dashboard
+- **Bloomberg-Style Dark Mode Interface**: Premium glassmorphism design for high-contrast professional use.
+- **AI Risk Analysis Modal**: Click "Analyze" to get an instant, explanation of the risk score (Critical/Warning/Stable) and detected signals.
+- **Live Risk Feed**: Real-time streaming of risk scores with "Refresh to Crawl" capability.
+- **Visualizations**: Risk distribution and volatility metrics.
+- **Deep-Links**: Direct access to source filings for verification.
 
 ## 🏗️ Architecture Overview
 
