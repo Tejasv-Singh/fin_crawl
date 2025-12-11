@@ -9,8 +9,11 @@ from datetime import datetime
 import requests
 import os
 from app.core.config import settings
+from app.core.config import settings
 from app.services.vector_db import vector_db
 from app.services.embedding import embedding_service
+from app.services.scoring import scoring_service
+from app.services.alerting import alert_service
 
 @celery_app.task
 def crawl_sec_edgar():
@@ -157,6 +160,15 @@ def process_document(doc_id: int):
         print(f"Adding {len(chunks)} chunks to Vector DB...")
         vector_db.add_chunks(chunks, metadatas, ids)
         
+        # Calculate Risk Score
+        print(f"Calculating risk score for doc {doc_id}...")
+        score = scoring_service.calculate_score(content)
+        doc.risk_score = score
+        print(f"Risk Score: {score}")
+
+        # Check for Alerts
+        alert_service.send_alert(doc.title, score, "High risk score calculated")
+
         doc.status = "EMBEDDED"
         db.commit()
         print(f"Successfully embedded document {doc_id}.")

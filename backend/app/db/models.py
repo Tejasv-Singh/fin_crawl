@@ -22,3 +22,6 @@ class Document(Base):
 
     # Simple processing status
     status = Column(String, default="COLLECTED") # COLLECTED, PARSED, EMBEDDED
+    
+    # Risk Score
+    risk_score = Column(Integer, default=0)
