@@ -1,0 +1,5 @@
+venv/
+local_data/
+fincrawl.db
+__pycache__/
+*.pyc
