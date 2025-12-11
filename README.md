@@ -95,6 +95,22 @@ This launches:
 - RAG engine
 - React dashboard
 
+## 🚀 Deployment
+
+### Backend (Render)
+Click below to deploy the Backend + Worker + Database to Render.com (Auto-configured).
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Tejasv-Singh/FINCRAWL)
+
+### Frontend (GitHub Pages)
+The Repository enables `GitHub Pages` automatically via GitHub Actions.
+1. Go to Repo Settings -> Pages -> Source: `GitHub Actions`.
+2. The dashboard will be live at `https://tejasv-singh.github.io/FINCRAWL/`.
+3. **Important**: You must configure the Frontend to talk to the Backend.
+   - Go to Repo Settings -> Secrets and variables -> Actions -> New Repository Variable.
+   - Name: `VITE_API_URL`
+   - Value: `https://your-render-backend-url.onrender.com/api/v1` (Get this from Render Dashboard).
+
 ## 📑 Data Ingestion
 
 To manually trigger document ingestion:

@@ -14,7 +14,7 @@ interface Document {
     published_date: string;
 }
 
-const BASE_URL = 'http://localhost:8001/api/v1';
+const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8001/api/v1';
 
 export function Dashboard() {
     const [documents, setDocuments] = useState<Document[]>([]);
